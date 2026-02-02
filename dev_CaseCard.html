@@ -1,0 +1,113 @@
+<!--
+fields:
+1. case
+2. front
+3. back
+-->
+
+<!-- Front Side -->
+
+<style>
+.card {
+    font-family: arial;
+    font-size: 20px;
+    text-align: center;
+    color: black;
+    background-color: white;
+}
+.marker {
+    font-style: italic;
+    font-weight: lighter;
+    text-align: left;
+    color: gray;
+}
+.cloze {
+    font-weight:bold;
+    color:blue;
+}
+</style>
+
+<div class="card">
+<div id="qa" style="opacity: 1;">
+
+<script>
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if (void 0 === window.Persistence) { var e = "github.com/SimonLammer/anki-persistence/", t = "_default"; if (window.Persistence_sessionStorage = function () { var i = !1; try { "object" == typeof window.sessionStorage && (i = !0, this.clear = function () { for (var t = 0; t < sessionStorage.length; t++) { var i = sessionStorage.key(t); 0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--) } }, this.setItem = function (i, n) { void 0 == n && (n = i, i = t), sessionStorage.setItem(e + i, JSON.stringify(n)) }, this.getItem = function (i) { return void 0 == i && (i = t), JSON.parse(sessionStorage.getItem(e + i)) }, this.removeItem = function (i) { void 0 == i && (i = t), sessionStorage.removeItem(e + i) }, this.getAllKeys = function () { for (var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) { var s = i[n]; 0 == s.indexOf(e) && t.push(s.substring(e.length, s.length)) } return t.sort() }) } catch (n) { } this.isAvailable = function () { return i } }, window.Persistence_windowKey = function (i) { var n = window[i], s = !1; "object" == typeof n && (s = !0, this.clear = function () { n[e] = {} }, this.setItem = function (i, s) { void 0 == s && (s = i, i = t), n[e][i] = s }, this.getItem = function (i) { return void 0 == i && (i = t), void 0 == n[e][i] ? null : n[e][i] }, this.removeItem = function (i) { void 0 == i && (i = t), delete n[e][i] }, this.getAllKeys = function () { return Object.keys(n[e]) }, void 0 == n[e] && this.clear()), this.isAvailable = function () { return s } }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) { var i = window.location.toString().indexOf("title"), n = window.location.toString().indexOf("main", i); i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt")) } }
+
+// vibe-coded
+// 替换text中的\{\{...\}\}以及<u>...</u>为replacement（replacement中的$$$代表所括内容）
+function createCloze(text, replacement) {
+    const pattern = /\{\{(.*?)\}\}|<u>(.*?)<\/u>/g;
+    return text.replace(pattern, function(match, p1, p2) {
+            const content = p1 || p2;
+            return replacement.replace(/\$\$\$/g, content);});
+}
+</script>
+
+<div id="case_field" style="display:none">
+    This {{is}} a <u>case</u>.
+    <br><br>
+    This is <u>another</u> case</div>
+</div>
+
+<div id="case_cloze_front"></div>
+
+<br>
+<div class="marker">front:</div>
+<br>
+{{front}}
+
+<script>
+if (Persistence.isAvailable()) { // 持久化可用？
+    let case_field = document.getElementById("case_field").innerHTML;
+
+    case_array = case_field.split('<br><br>'); // 以双换行分割不同case
+
+    case_item = case_array[Math.floor(Math.random() * case_array.length)]; // 随机选中一个case
+
+    Persistence.setItem(case_item); // 储存到持久化，以在背面调取选中的case
+
+    document.getElementById("case_cloze_front").innerHTML = createCloze(case_item, "<span class='cloze'>[___]</span>") // 隐藏所挖内容，并且在卡面显示
+}
+else {
+    document.getElementById("case_cloze_front").innerHTML = "持久化不可用，当前程序不支持CaseCard模版";
+}
+</script>
+</div>
+
+<!-- Front Side Ends -->
+<hr>
+<!-- Back Side -->
+
+<div id="qa_" style="opacity: 1;">
+
+<script>
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if (void 0 === window.Persistence) { var e = "github.com/SimonLammer/anki-persistence/", t = "_default"; if (window.Persistence_sessionStorage = function () { var i = !1; try { "object" == typeof window.sessionStorage && (i = !0, this.clear = function () { for (var t = 0; t < sessionStorage.length; t++) { var i = sessionStorage.key(t); 0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--) } }, this.setItem = function (i, n) { void 0 == n && (n = i, i = t), sessionStorage.setItem(e + i, JSON.stringify(n)) }, this.getItem = function (i) { return void 0 == i && (i = t), JSON.parse(sessionStorage.getItem(e + i)) }, this.removeItem = function (i) { void 0 == i && (i = t), sessionStorage.removeItem(e + i) }, this.getAllKeys = function () { for (var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) { var s = i[n]; 0 == s.indexOf(e) && t.push(s.substring(e.length, s.length)) } return t.sort() }) } catch (n) { } this.isAvailable = function () { return i } }, window.Persistence_windowKey = function (i) { var n = window[i], s = !1; "object" == typeof n && (s = !0, this.clear = function () { n[e] = {} }, this.setItem = function (i, s) { void 0 == s && (s = i, i = t), n[e][i] = s }, this.getItem = function (i) { return void 0 == i && (i = t), void 0 == n[e][i] ? null : n[e][i] }, this.removeItem = function (i) { void 0 == i && (i = t), delete n[e][i] }, this.getAllKeys = function () { return Object.keys(n[e]) }, void 0 == n[e] && this.clear()), this.isAvailable = function () { return s } }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) { var i = window.location.toString().indexOf("title"), n = window.location.toString().indexOf("main", i); i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt")) } }
+</script>
+
+<div id="case_cloze_back"></div>
+
+<br>
+<div class="marker">front:</div>
+<br>
+{{front}}
+<br>
+<div class="marker">back:</div>
+<br>
+{{back}}
+
+<script>
+if (Persistence.isAvailable()) {
+    case_item = Persistence.getItem(); // 获取在正面存储的case
+    Persistence.clear(); // 清除持久化储存
+
+    document.getElementById("case_cloze_back").innerHTML = createCloze(case_item, "<span class='cloze'>$$$</span>"); // 高亮所挖内容，并且在卡面显示
+}
+else {
+    document.getElementById("case_cloze_back").innerHTML = "持久化不可用，当前程序不支持CaseCard模版";
+}
+</script>
+</div>
+<!-- Back Side Ends-->
+</div>
